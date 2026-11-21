@@ -4,7 +4,34 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-21
+
+Fifteen gated CVE skills for the critical (CVSS 9+) vulnerabilities disclosed between 2026-09-21 and 2026-11-21, each with lab-first verifiers under `scripts/poc/<skill>/`, alongside the target noise governor, hierarchical budgets, the coverage ledger, scanner and bbot ingestion, secrets at rest and the other work below.
+
 ### Added
+
+- **CVE skills, November 2026**: fifteen skills, one per critical CVE or CVE set, built on the `php2shell` layout. Each `SKILL.md` covers the bug, the affected and fixed versions, hard gates (authorization, program policy, lab first, no destructive payloads against live targets), the detection workflow, hunting, mitigation and reporting. The matching `scripts/poc/<skill>/` holds `poc/` verifiers, `lab/setup.sh` and `docs/ANALYSIS.md`. The verifiers fingerprint and classify the target (exit 0 not affected, 1 affected, 2 unknown) and never send memory-corruption, deserialization or injection payloads:
+  - `nginx2shell`: NGINX HTTP/2 send-window underflow (CVE-2026-123007).
+  - `vcenter-vmdir-bypass`: vCenter Directory Service auth bypass (CVE-2026-123890, exploited).
+  - `roller-xmlrpc-rce`: Apache Roller XML-RPC deserialization (CVE-2026-129448 / CVE-2026-82384, exploited). A benign `<ex:nil/>` probe proves extension types are parsed before auth.
+  - `axis1-soapfault-rce`: Apache Axis 1.x SOAP fault class instantiation (CVE-2026-90436, KEV).
+  - `gitlab-onigmo-rce`: GitLab Onigmo regex RCEs (CVE-2026-97229 KEV, CVE-2026-110264).
+  - `linux-tcp-inetopt-uaf`: Linux IPv4 TCP handshake use-after-free (CVE-2026-98432). Local kernel evidence only.
+  - `httpd-h2-race`: Apache httpd mod_http2 race (CVE-2026-119618).
+  - `bigip-apm-oauth-rce`: BIG-IP APM OAuth Authorization Server overflow (CVE-2026-94127, KEV).
+  - `gpustack-loopback-bypass`: GPUStack loopback admin bypass (CVE-2026-102895, KEV). One read-only request proves it.
+  - `expressway-cluster-cred`: Cisco Expressway hard-coded cluster credential (CVE-2026-76466, KEV).
+  - `redcap-rce`: REDCap unauthenticated RCE (CVE-2026-90817, KEV).
+  - `windows-ldap-rce`: Windows LDAP out-of-bounds write (CVE-2026-119958). Includes `verify_patch.ps1`.
+  - `trafficserver-oct2026`: Apache Traffic Server CVE-2026-111812..111815. `verify_ticket_bypass.sh` checks CVE-2026-111815 with one TLS resumption.
+  - `oracle-ebs-oct2026`: Oracle EBS CVE-2026-101809 / CVE-2026-101767. Includes `check_cpu.sql`.
+  - `synology-dsm-oauth`: Synology DSM OAuth file access (CVE-2026-120382), also flagging KEV CVE-2024-10441.
+- **Labs verified on 2026-11-21**:
+  - NGINX 1.31.8 vs 1.31.9, Roller 6.1.4 vs 6.1.7, httpd 2.4.70 vs 2.4.71, GPUStack v2.1.1 vs v2.2.2, Traffic Server 10.2.0 vs 10.2.1 and GitLab 19.4.1 vs 19.5.1 run side by side as loopback-only containers. In each pair the vulnerable build is reported affected and the fixed build not affected.
+  - The Axis 1.4 lab is reported affected.
+  - On Traffic Server 10.2.0 the CVE-2026-111815 bypass reproduces: an `open.lab` session ticket resumed on the `verify_client: STRICT` SNI without a client certificate. 10.2.1 refuses it.
+  - Licensed products (vCenter, BIG-IP, Expressway, Windows, Oracle EBS, Synology) and REDCap use an operator-supplied lab. Their `lab/setup.sh` refuses public addresses.
+  - The kernel lab runs over SSH on disposable VMs.
 
 - **Target noise governor**: one shared egress governor paces ARTEX's own HTTP requests (WebFetch, the http custom tools and the enrich probe) against a noise profile (`off` by default, `quiet`, `balanced`, `aggressive`): a per-host token bucket with jitter, per-host and global in-flight caps, 429/503 backoff, GET deduplication with a short cache, and a configurable target User-Agent (`ARTEX_TARGET_USER_AGENT`). Off is a strict passthrough (#205).
 - **Low-and-slow prompt block**: when a noise profile is set, the planner, worker, main agent and chat prompts carry the per-host limits of the profile and the exact rate or delay flags for nmap, nuclei, httpx, katana, ffuf, dalfox and sqlmap; with the profile off the prompts are unchanged (#212).
