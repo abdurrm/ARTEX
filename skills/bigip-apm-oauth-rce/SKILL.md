@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/bigip-apm-oauth-rce/`. Run every PoC ag
 lab first (`scripts/poc/bigip-apm-oauth-rce/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/bigip-apm-oauth-rce/...` are relative to this skill's base directory
+(`<base>/scripts/poc/bigip-apm-oauth-rce/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/bigip-apm-oauth-rce/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/bigip-apm-oauth-rce/lab ./bigip-apm-oauth-rce-lab`
+  and run `./bigip-apm-oauth-rce-lab/setup.sh` from there.
+
 ## What the bug is
 
 - The bug is a heap-based buffer overflow (CWE-122) in the OAuth

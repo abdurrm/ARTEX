@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/vcenter-vmdir-bypass/`. Run every PoC a
 lab first (`scripts/poc/vcenter-vmdir-bypass/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/vcenter-vmdir-bypass/...` are relative to this skill's base directory
+(`<base>/scripts/poc/vcenter-vmdir-bypass/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/vcenter-vmdir-bypass/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/vcenter-vmdir-bypass/lab ./vcenter-vmdir-bypass-lab`
+  and run `./vcenter-vmdir-bypass-lab/setup.sh` from there.
+
 ## What the bug is
 
 - The flaw is an authentication bypass through an alternate path or channel

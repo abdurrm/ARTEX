@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/gpustack-loopback-bypass/`. Run every P
 lab first (`scripts/poc/gpustack-loopback-bypass/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/gpustack-loopback-bypass/...` are relative to this skill's base directory
+(`<base>/scripts/poc/gpustack-loopback-bypass/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/gpustack-loopback-bypass/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/gpustack-loopback-bypass/lab ./gpustack-loopback-bypass-lab`
+  and run `./gpustack-loopback-bypass-lab/setup.sh` from there.
+
 ## What the bug is
 
 - In `gpustack/api/auth.py`, `get_current_user` treats any request whose

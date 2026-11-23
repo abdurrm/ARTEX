@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/windows-ldap-rce/`. Run every PoC again
 lab first (`scripts/poc/windows-ldap-rce/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/windows-ldap-rce/...` are relative to this skill's base directory
+(`<base>/scripts/poc/windows-ldap-rce/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/windows-ldap-rce/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/windows-ldap-rce/lab ./windows-ldap-rce-lab`
+  and run `./windows-ldap-rce-lab/setup.sh` from there.
+
 ## What the bug is
 
 - The bug is an out-of-bounds write (CWE-787) in the Windows LDAP

@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/redcap-rce/`. Run every PoC against the
 lab first (`scripts/poc/redcap-rce/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/redcap-rce/...` are relative to this skill's base directory
+(`<base>/scripts/poc/redcap-rce/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/redcap-rce/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/redcap-rce/lab ./redcap-rce-lab`
+  and run `./redcap-rce-lab/setup.sh` from there.
+
 ## What the bug is
 
 - An unauthenticated attacker sends manipulated HTTP requests to REDCap's

@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/synology-dsm-oauth/`. Run every PoC aga
 lab first (`scripts/poc/synology-dsm-oauth/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/synology-dsm-oauth/...` are relative to this skill's base directory
+(`<base>/scripts/poc/synology-dsm-oauth/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/synology-dsm-oauth/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/synology-dsm-oauth/lab ./synology-dsm-oauth-lab`
+  and run `./synology-dsm-oauth-lab/setup.sh` from there.
+
 ## What the bugs are
 
 - **CVE-2026-120382** (CVSS 9.8, critical):

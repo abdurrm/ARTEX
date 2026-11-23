@@ -4,13 +4,18 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+### Changed
+
+- **CVE skill scripts moved into their skills**: the verifiers, labs and analyses of the fifteen November 2026 CVE skills moved from `scripts/poc/<skill>/` to `skills/<skill>/scripts/poc/<skill>/`. `/app/skills` is the only skill tree mounted in the container, so the old location was not reachable by the agent. Each `SKILL.md` gains a "Running the bundled scripts" section: verifiers run in place, `lab/setup.sh` is copied into the task directory first because the skill directory is read-only for agent processes.
+- **Dashboard version**: the image is built with `ARTEX_VERSION=<commit>-<commit date>`, so the footer shows which commit is running.
+
 ## [0.7.0] - 2026-11-21
 
-Fifteen gated CVE skills for the critical (CVSS 9+) vulnerabilities disclosed between 2026-09-21 and 2026-11-21, each with lab-first verifiers under `scripts/poc/<skill>/`, alongside the target noise governor, hierarchical budgets, the coverage ledger, scanner and bbot ingestion, secrets at rest and the other work below.
+Fifteen gated CVE skills for the critical (CVSS 9+) vulnerabilities disclosed between 2026-09-21 and 2026-11-21, each with lab-first verifiers under `skills/<skill>/scripts/poc/<skill>/`, alongside the target noise governor, hierarchical budgets, the coverage ledger, scanner and bbot ingestion, secrets at rest and the other work below.
 
 ### Added
 
-- **CVE skills, November 2026**: fifteen skills, one per critical CVE or CVE set, built on the `php2shell` layout. Each `SKILL.md` covers the bug, the affected and fixed versions, hard gates (authorization, program policy, lab first, no destructive payloads against live targets), the detection workflow, hunting, mitigation and reporting. The matching `scripts/poc/<skill>/` holds `poc/` verifiers, `lab/setup.sh` and `docs/ANALYSIS.md`. The verifiers fingerprint and classify the target (exit 0 not affected, 1 affected, 2 unknown) and never send memory-corruption, deserialization or injection payloads:
+- **CVE skills, November 2026**: fifteen skills, one per critical CVE or CVE set, built on the `php2shell` layout. Each `SKILL.md` covers the bug, the affected and fixed versions, hard gates (authorization, program policy, lab first, no destructive payloads against live targets), the detection workflow, hunting, mitigation and reporting. The matching `skills/<skill>/scripts/poc/<skill>/` holds `poc/` verifiers, `lab/setup.sh` and `docs/ANALYSIS.md`. The verifiers fingerprint and classify the target (exit 0 not affected, 1 affected, 2 unknown) and never send memory-corruption, deserialization or injection payloads:
   - `nginx2shell`: NGINX HTTP/2 send-window underflow (CVE-2026-123007).
   - `vcenter-vmdir-bypass`: vCenter Directory Service auth bypass (CVE-2026-123890, exploited).
   - `roller-xmlrpc-rce`: Apache Roller XML-RPC deserialization (CVE-2026-129448 / CVE-2026-82384, exploited). A benign `<ex:nil/>` probe proves extension types are parsed before auth.

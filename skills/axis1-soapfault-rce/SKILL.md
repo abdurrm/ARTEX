@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/axis1-soapfault-rce/`. Run every PoC ag
 lab first (`scripts/poc/axis1-soapfault-rce/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/axis1-soapfault-rce/...` are relative to this skill's base directory
+(`<base>/scripts/poc/axis1-soapfault-rce/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/axis1-soapfault-rce/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/axis1-soapfault-rce/lab ./axis1-soapfault-rce-lab`
+  and run `./axis1-soapfault-rce-lab/setup.sh` from there.
+
 ## What the bug is
 
 - Apache Axis 1.x is an end-of-life Java SOAP engine. When it processes a

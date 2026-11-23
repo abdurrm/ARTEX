@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/linux-tcp-inetopt-uaf/`. Run every PoC 
 lab first (`scripts/poc/linux-tcp-inetopt-uaf/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/linux-tcp-inetopt-uaf/...` are relative to this skill's base directory
+(`<base>/scripts/poc/linux-tcp-inetopt-uaf/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/linux-tcp-inetopt-uaf/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/linux-tcp-inetopt-uaf/lab ./linux-tcp-inetopt-uaf-lab`
+  and run `./linux-tcp-inetopt-uaf-lab/setup.sh` from there.
+
 ## What the bug is
 
 - During the IPv4 TCP handshake, the kernel hands the listener's IP options

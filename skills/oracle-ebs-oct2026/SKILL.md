@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/oracle-ebs-oct2026/`. Run every PoC aga
 lab first (`scripts/poc/oracle-ebs-oct2026/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/oracle-ebs-oct2026/...` are relative to this skill's base directory
+(`<base>/scripts/poc/oracle-ebs-oct2026/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/oracle-ebs-oct2026/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/oracle-ebs-oct2026/lab ./oracle-ebs-oct2026-lab`
+  and run `./oracle-ebs-oct2026-lab/setup.sh` from there.
+
 ## What the bugs are
 
 - **CVE-2026-101809** (CVSS 3.1 **10.0**): Workflow Notification Mailer.

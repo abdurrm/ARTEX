@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/expressway-cluster-cred/`. Run every Po
 lab first (`scripts/poc/expressway-cluster-cred/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/expressway-cluster-cred/...` are relative to this skill's base directory
+(`<base>/scripts/poc/expressway-cluster-cred/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/expressway-cluster-cred/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/expressway-cluster-cred/lab ./expressway-cluster-cred-lab`
+  and run `./expressway-cluster-cred-lab/setup.sh` from there.
+
 ## What the bug is
 
 - The database service that clustered Expressway peers use to replicate

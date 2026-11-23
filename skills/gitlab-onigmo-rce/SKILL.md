@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/gitlab-onigmo-rce/`. Run every PoC agai
 lab first (`scripts/poc/gitlab-onigmo-rce/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/gitlab-onigmo-rce/...` are relative to this skill's base directory
+(`<base>/scripts/poc/gitlab-onigmo-rce/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/gitlab-onigmo-rce/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/gitlab-onigmo-rce/lab ./gitlab-onigmo-rce-lab`
+  and run `./gitlab-onigmo-rce-lab/setup.sh` from there.
+
 ## What the bugs are
 
 - **CVE-2026-97229** (CVSS 10.0, KEV):

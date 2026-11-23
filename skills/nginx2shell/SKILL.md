@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/nginx2shell/`. Run every PoC against th
 lab first (`scripts/poc/nginx2shell/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/nginx2shell/...` are relative to this skill's base directory
+(`<base>/scripts/poc/nginx2shell/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/nginx2shell/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/nginx2shell/lab ./nginx2shell-lab`
+  and run `./nginx2shell-lab/setup.sh` from there.
+
 ## What the bug is
 
 - The bug is in the NGINX HTTP/2 module (`ngx_http_v2_module`), in how it

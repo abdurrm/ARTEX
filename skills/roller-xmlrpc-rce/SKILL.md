@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/roller-xmlrpc-rce/`. Run every PoC agai
 lab first (`scripts/poc/roller-xmlrpc-rce/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/roller-xmlrpc-rce/...` are relative to this skill's base directory
+(`<base>/scripts/poc/roller-xmlrpc-rce/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/roller-xmlrpc-rce/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/roller-xmlrpc-rce/lab ./roller-xmlrpc-rce-lab`
+  and run `./roller-xmlrpc-rce-lab/setup.sh` from there.
+
 ## What the bug is
 
 - Roller exposes the MetaWeblog/Blogger API through Apache XML-RPC at

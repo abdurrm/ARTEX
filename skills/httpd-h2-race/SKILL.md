@@ -11,6 +11,18 @@ vendored PoCs and lab under `scripts/poc/httpd-h2-race/`. Run every PoC against 
 lab first (`scripts/poc/httpd-h2-race/lab/setup.sh`), then once against the
 authorized target, and compare the outputs.
 
+## Running the bundled scripts
+
+Paths such as `scripts/poc/httpd-h2-race/...` are relative to this skill's base directory
+(`<base>/scripts/poc/httpd-h2-race/`). The skill directory is read-only for agent processes,
+so never write into it:
+
+- `poc/` verifiers only read and print; run them in place, for example
+  `python3 <base>/scripts/poc/httpd-h2-race/poc/<script>`.
+- Before running `lab/setup.sh` (it writes its config files next to itself), copy the
+  lab into the task working directory: `cp -r <base>/scripts/poc/httpd-h2-race/lab ./httpd-h2-race-lab`
+  and run `./httpd-h2-race-lab/setup.sh` from there.
+
 ## What the bug is
 
 - The bug is a race condition (CWE-362) in mod_http2's `assign_headers()`.
